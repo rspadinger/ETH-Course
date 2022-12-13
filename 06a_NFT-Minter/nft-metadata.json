@@ -1,0 +1,12 @@
+{
+    "attributes" : [ {
+      "trait_type" : "Fur",
+      "value" : "White"
+    }, {
+      "trait_type" : "Eye color",
+      "value" : "Blue"
+    } ],
+    "description" : "The world's most adorable cat.",
+    "image" : "https://gateway.pinata.cloud/ipfs/Qmd17pF2uHL1ZocvZi6yH4651ka6wNRUcMsDBW9mc14J1H",
+    "name" : "Jolly"
+}

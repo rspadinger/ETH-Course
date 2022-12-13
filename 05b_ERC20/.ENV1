@@ -1,0 +1,5 @@
+ALCHEMY_API_URL_GOERLI = "https://eth-goerli.alchemyapi.io/v2/..."
+PRIVATE_KEY = ""
+CONTRACT_ADDRESS = 0x5fbdb2315678afecb367f032d93f642f64180aa3
+//Hardhat: 0x5FbDB2315678afecb367f032d93F642f64180aa3
+//Goerli: 0x...
