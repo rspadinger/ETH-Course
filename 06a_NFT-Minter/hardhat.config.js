@@ -1,15 +1,15 @@
 require("@nomicfoundation/hardhat-toolbox")
 require("dotenv").config()
 
-const { REACT_APP_ALCHEMY_API_URL_GOERLI, REACT_APP_PRIVATE_KEY } = process.env
+const { VITE_ALCHEMY_API_URL, VITE_PRIVATE_KEY } = process.env
 
 module.exports = {
-    solidity: "0.8.9",
+    solidity: "0.8.20",
     defaultNetwork: "localhost",
     networks: {
-        goerli: {
-            url: REACT_APP_ALCHEMY_API_URL_GOERLI,
-            accounts: [`0x${REACT_APP_PRIVATE_KEY}`],
+        sepolia: {
+            url: VITE_ALCHEMY_API_URL,
+            accounts: [`0x${VITE_PRIVATE_KEY}`],
         },
     },
 }

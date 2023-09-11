@@ -1,28 +1,24 @@
 require("@nomicfoundation/hardhat-toolbox")
 require("dotenv").config()
 
-const { ALCHEMY_API_URL_GOERLI, PRIVATE_KEY } = process.env
-
-task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
-    const accounts = await hre.ethers.getSigners()
-
-    for (const account of accounts) {
-        console.log(account.address)
-    }
-})
+const { ALCHEMY_API_URL, PRIVATE_KEY, ETHERSCAN_API_KEY } = process.env
 
 module.exports = {
     solidity: {
-        version: "0.8.9",
+        version: "0.8.20",
         settings: {
             optimizer: { enabled: true, runs: 200 },
         },
     },
     defaultNetwork: "localhost",
     networks: {
-        goerli: {
-            url: ALCHEMY_API_URL_GOERLI,
+        sepolia: {
+            url: ALCHEMY_API_URL,
             accounts: [`0x${PRIVATE_KEY}`],
         },
+    },
+    //npx hardhat verify --network sepolia ADDR "constructor argument"
+    etherscan: {
+        apiKey: ETHERSCAN_API_KEY,
     },
 }

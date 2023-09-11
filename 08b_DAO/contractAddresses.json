@@ -1,6 +1,6 @@
 {
-  "govTokenAddress": "0x19cEcCd6942ad38562Ee10bAfd44776ceB67e923",
-  "timeLockAddress": "0x02b0B4EFd909240FCB2Eb5FAe060dC60D112E3a4",
-  "governanceAddress": "0x638A246F0Ec8883eF68280293FFE8Cfbabe61B44",
-  "treasuryAddress": "0x6C2d83262fF84cBaDb3e416D527403135D757892"
+  "govTokenAddress": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "timeLockAddress": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+  "governanceAddress": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+  "treasuryAddress": "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6"
 }

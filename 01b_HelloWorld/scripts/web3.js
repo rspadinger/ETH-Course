@@ -1,6 +1,6 @@
 //npx hardhat run scripts/web3.js
 
-const API_URL_GOERLI = process.env.API_URL_GOERLI
+const API_URL = process.env.API_URL
 const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS
 const CONTRACT_ADDRESS_LOCAL = process.env.CONTRACT_ADDRESS_LOCAL
 
@@ -20,7 +20,7 @@ async function testWeb3Js() {
     //web3.setProvider(provider)
 
     ////create a web3 instance connected to a third party provider like Alchemy
-    // web3 = new Web3(API_URL_GOERLI)
+    // web3 = new Web3(API_URL)
 
     //*********** web3.eth ***************** */
 

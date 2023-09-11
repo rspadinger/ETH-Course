@@ -1,20 +1,14 @@
 {
-  "name": "helloworld",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "RS",
-  "license": "ISC",
-  "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^1.0.2",
-    "@nomiclabs/hardhat-web3": "^2.0.0",
-    "hardhat": "^2.10.2",
-    "web3": "^1.7.5"
-  },
-  "dependencies": {
-    "dotenv": "^16.0.1"
-  }
+    "name": "helloworld",
+    "version": "1.0.0",
+    "description": "",
+    "devDependencies": {
+        "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+        "hardhat": "^2.17.2",
+        "@nomiclabs/hardhat-web3": "^2.0.0",
+        "web3": "^1.7.5"
+    },
+    "dependencies": {
+        "dotenv": "^16.3.1"
+    }
 }

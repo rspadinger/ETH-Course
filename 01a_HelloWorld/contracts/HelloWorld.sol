@@ -1,18 +1,12 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity 0.8.20;
 
 contract HelloWorld {
-    string public message;
+    //TODO add a public state variable of type string
 
-    event UpdateMessage(address indexed from, string oldStr, string newStr);
+    //TODO create an event (UpdateMessage) that logs the address of the caller, the old string value and the modified string value
 
-    constructor(string memory initMessage) {
-        message = initMessage;
-    }
-
-    function updateMessage(string memory newMessage) public {
-        string memory oldMsg = message;
-        message = newMessage;
-        emit UpdateMessage(msg.sender, oldMsg, newMessage);
-    }
+    //TODO create a constructor that sets an initial value for the state variable declared above
+    
+    //TODO create a function (updateMessage) that modifies the state variable and emits the "UpdateMessage" event    
 }

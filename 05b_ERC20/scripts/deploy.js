@@ -1,15 +1,11 @@
 async function main() {
-    const MyToken = await ethers.getContractFactory("MyToken")
-    const myToken = await MyToken.deploy()
+    const myToken = await ethers.deployContract("MyToken")
+    await myToken.waitForDeployment()
 
-    await myToken.deployed()
-
-    console.log("MyToken deployed to:", myToken.address)
+    console.log("MyToken deployed to:", myToken.target)
 }
 
-main()
-    .then(() => process.exit(0))
-    .catch((error) => {
-        console.error(error)
-        process.exit(1)
-    })
+main().catch((error) => {
+    console.error(error)
+    process.exitCode = 1
+})

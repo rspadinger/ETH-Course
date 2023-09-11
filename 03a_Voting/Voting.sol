@@ -1,73 +1,33 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity 0.8.20;
 
 contract Voting {
-    address public owner;
-    uint public electionEndTime;
 
-    struct Voter {
-        bool allowedToVote;
-        bool voted;
-        uint vote;
+    //TODO Each voter needs to be granted access to vote and can only vote once for a specific proposal => index of array: 0, 1, 2...
+    // Each proposal has an Id and holds the number of votes received
+
+   
+    //TODO During contract creation, all proposals (uint[]) are created, the contract owner is initialized
+    //  and the end of the election (electionEndTime) is defined
+    constructor ... {
+        
     }
 
-    struct Proposal {
-        uint id;
-        uint voteCount;
+    //TODO only the contract owner can grant a user the right to vote and only before the electionEndTime 
+    // revert with a custom error if the user has already voted - specify the address of the user
+    function giveRightToVote ... {
+        
     }
 
-    mapping(address => Voter) public voters;
-
-    Proposal[] public proposals;
-
-    event UserHasVoted(address indexed voter, uint proposal);
-
-    ///The user has already voted
-    error UserHasAlreadyVoted(address voter);
-
-    modifier onlyOwner() {
-        require(msg.sender == owner, "You are not authorized to perform this action");
-        _;
+    //TODO everyone who has been granted the right to vote and has not already voted is allowed to vote, but only before electionEndTime
+    // emit an event (UserHasVoted) that logs the address and the vote of the voter
+    function vote ... {
+        
     }
 
-    modifier onlyBefore(uint time) {
-        require(block.timestamp < time, "Too late!");
-        _;
-    }
-
-    constructor(uint[] memory proposalIds, uint electionDuration) {
-        owner = msg.sender;
-        electionEndTime = block.timestamp + electionDuration;
-        voters[owner].allowedToVote = true;
-
-        for (uint i = 0; i < proposalIds.length; i++) {
-            proposals.push(Proposal(proposalIds[i], 0));
-        }
-    }
-
-    function giveRightToVote(address voter) external onlyOwner {
-        if (voters[voter].voted) revert UserHasAlreadyVoted(voter);
-        voters[voter].allowedToVote = true;
-    }
-
-    function vote(uint proposal) external {
-        Voter storage sender = voters[msg.sender];
-        require(sender.allowedToVote == true, "Has no right to vote");
-        if (sender.voted) revert UserHasAlreadyVoted(msg.sender);
-
-        sender.voted = true;
-        sender.vote = proposal;
-        proposals[proposal].voteCount += 1;
-
-        emit UserHasVoted(msg.sender, proposal);
-    }
-
-    function winningProposal() public view returns (uint winningProposalId, uint winningVoteCount) {
-        for (uint p = 0; p < proposals.length; p++) {
-            if (proposals[p].voteCount > winningVoteCount) {
-                winningVoteCount = proposals[p].voteCount;
-                winningProposalId = proposals[p].id;
-            }
-        }
+    //TODO anyone is allowed to check the current result of the election 
+    // return winningProposalId and winningVoteCount
+    function winningProposal() ... {
+        
     }
 }

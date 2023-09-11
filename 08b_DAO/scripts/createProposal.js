@@ -19,29 +19,29 @@ async function createProposal() {
     const treasury = await ethers.getContractAt("Treasury", contractAddresses.treasuryAddress)
 
     //display the balance of the treasury and the payee account
-    treasuryBalance = await ethers.provider.getBalance(treasury.address)
+    treasuryBalance = await ethers.provider.getBalance(treasury.target)
 
     //at the beginning, the treasury still holds all the funds => haven't been released yet to the payee
     isReleased = await treasury.isReleased()
     console.log(`Funds released? ${isReleased}`)
-    console.log(`Funds inside of treasury: ${ethers.utils.formatEther(treasuryBalance.toString())} ETH\n`)
+    console.log(`Funds inside of treasury: ${ethers.formatEther(treasuryBalance.toString())} ETH\n`)
 
     payeeBalance = await ethers.provider.getBalance(payee.address)
-    console.log(`Payee balance: ${ethers.utils.formatEther(payeeBalance.toString())} ETH\n`)
+    console.log(`Payee balance: ${ethers.formatEther(payeeBalance.toString())} ETH\n`)
 
     const governance = await ethers.getContractAt("Governance", contractAddresses.governanceAddress)
 
     //encode the releaseFunds function from the treasury contract => required for the proposal
-    const iface = new ethers.utils.Interface(["function releaseFunds()"])
-    const encodedReleaseFunds = iface.encodeFunctionData("releaseFunds")
+    const iface = new ethers.Interface(["function releaseFunds(address payee)"])
+    const encodedReleaseFunds = iface.encodeFunctionData("releaseFunds", [payee.address])
     const description = getRandomNumberString() // "Release Funds from Treasury"
 
     //create a proposal (contains 1 action) => target: address of treasury, value: 0, calldata: encoded "releaseFunds" function
-    txn = await governance.propose([treasury.address], [0], [encodedReleaseFunds], description)
+    txn = await governance.propose([treasury.target], [0], [encodedReleaseFunds], description)
     txnReceipt = await txn.wait()
 
     //display the proposal Id from the ProposalCreated event
-    const id = txnReceipt.events[0].args["proposalId"]
+    const id = txnReceipt.logs[0].args["proposalId"]
     console.log(`Created Proposal: ${id.toString()}\n`)
 
     //display the current state of the proposal
@@ -62,7 +62,7 @@ async function createProposal() {
     //display the number of votes required for the proposal to pass => quorum
     // quorum = 5% of totalSupply (1000) => 50
     const quorum = await governance.quorum(blockNumber - 1)
-    console.log(`Number of votes required to pass: ${ethers.utils.formatEther(quorum.toString())}\n`)
+    console.log(`Number of votes required to pass: ${ethers.formatEther(quorum.toString())}\n`)
 
     //cast the votes
     console.log(`Casting votes...\n`)
@@ -84,9 +84,9 @@ async function createProposal() {
 
     //display the vote distribution
     const { againstVotes, forVotes, abstainVotes } = await governance.proposalVotes(id)
-    console.log(`Votes For: ${ethers.utils.formatEther(forVotes.toString())}`)
-    console.log(`Votes Against: ${ethers.utils.formatEther(againstVotes.toString())}`)
-    console.log(`Votes Neutral: ${ethers.utils.formatEther(abstainVotes.toString())}\n`)
+    console.log(`Votes For: ${ethers.formatEther(forVotes.toString())}`)
+    console.log(`Votes Against: ${ethers.formatEther(againstVotes.toString())}`)
+    console.log(`Votes Neutral: ${ethers.formatEther(abstainVotes.toString())}\n`)
 
     blockNumber = await ethers.provider.getBlockNumber()
     console.log(`Current blocknumber: ${blockNumber}\n`)
@@ -95,14 +95,14 @@ async function createProposal() {
     console.log(`Current state of proposal: ${proposalState.toString()} (Succeeded) \n`)
 
     //queue the proposal => we need to provide the hash of the proposal description
-    const hash = ethers.utils.id(description)
-    await governance.queue([treasury.address], [0], [encodedReleaseFunds], hash)
+    const hash = ethers.id(description)
+    await governance.queue([treasury.target], [0], [encodedReleaseFunds], hash)
 
     proposalState = await governance.state(id)
     console.log(`Current state of proposal: ${proposalState.toString()} (Queued) \n`)
 
     //we can execute the proposal immediately after queueing it => we set timelock minDelay = 0
-    await governance.execute([treasury.address], [0], [encodedReleaseFunds], hash)
+    await governance.execute([treasury.target], [0], [encodedReleaseFunds], hash)
 
     proposalState = await governance.state(id)
     console.log(`Current state of proposal: ${proposalState.toString()} (Executed) \n`)
@@ -111,11 +111,11 @@ async function createProposal() {
     isReleased = await treasury.isReleased()
     console.log(`Funds released? ${isReleased}`)
 
-    treasuryBalance = await ethers.provider.getBalance(treasury.address)
-    console.log(`Funds inside of treasury: ${ethers.utils.formatEther(treasuryBalance.toString())} ETH\n`)
+    treasuryBalance = await ethers.provider.getBalance(treasury.target)
+    console.log(`Funds inside of treasury: ${ethers.formatEther(treasuryBalance.toString())} ETH\n`)
 
     payeeBalance = await ethers.provider.getBalance(payee.address)
-    console.log(`Payee balance: ${ethers.utils.formatEther(payeeBalance.toString())} ETH\n`)
+    console.log(`Payee balance: ${ethers.formatEther(payeeBalance.toString())} ETH\n`)
 }
 
 createProposal()

@@ -1,4 +1,4 @@
-// npx hardhat run scripts/interact.js --network goerli
+// npx hardhat run scripts/interact.js --network sepolia
 const { ALCHEMY_API_KEY, PRIVATE_KEY, CONTRACT_ADDRESS, CONTRACT_ADDRESS_LOCAL, RINKEBY_ACCOUNT2 } = process.env
 
 const contractJson = require("../artifacts/contracts/HelloWorld.sol/HelloWorld.json")
@@ -22,7 +22,6 @@ async function testEthersJs() {
         //signer = await provider.getSigner()
         signerAddress = signer1.address
         account2Address = signer2.address
-        //;[signerAddress, account2Address] = await provider.listAccounts()
 
         contract = await ethers.getContractAt("HelloWorld", CONTRACT_ADDRESS_LOCAL)
     } else {
@@ -31,7 +30,7 @@ async function testEthersJs() {
         isLocalNetwork = false
         signer = new ethers.Wallet(PRIVATE_KEY, provider)
         signerAddress = await signer.getAddress()
-        account2Address = GOERLI_ACCOUNT2
+        account2Address = ACCOUNT2
         contract = new ethers.Contract(CONTRACT_ADDRESS, contractJson.abi, signer)
     }
 
@@ -48,7 +47,7 @@ async function testEthersJs() {
     //### if we use a local blockchain like Ganache or Hardhat, we can also directly use a JsonRpcProvider
     //if no connectionInfo is provided, "http://localhost:8545" is used
 
-    //### for web apps that use MM (uses Infura internally), use a web3Provider
+    //### for web apps that use MM, use a BrowserProvider
 
     //console.log("Provider: ", provider)
 
@@ -59,7 +58,6 @@ async function testEthersJs() {
     console.log("Txn count for any account: ")
     console.log("Block Number of most recently mined block: ")
     console.log("Get current fee data: ")
-    console.log("List of accounts managed by this provider: ")
 
     //########################## SIGNER ##############################################
 
@@ -79,7 +77,6 @@ async function testEthersJs() {
 
     //### Signer methods
     console.log("Signer address: ")
-    console.log("Balance: ")
     console.log("Txn count: ")
 
     //### send ETH by calling sendTransaction on the Signer
@@ -157,7 +154,7 @@ async function testEthersJs() {
 
     //### getting logs from the provider by specifying a filter
     //https://medium.com/mycrypto/understanding-event-logs-on-the-ethereum-blockchain-f4ae7ba50378
-    //on Goerli, fromBlock: "latest" won't return any logs => provide a specific block number
+    //fromBlock: "latest" won't return any logs => provide a specific block number
     let filter = {
         fromBlock: "latest", //fromBlock & toBlock have no effect on provider.on(...) 5
         toBlock: "latest",
@@ -226,47 +223,42 @@ async function testEthersJs() {
     //get address from PK: add 0x in front of PK
     console.log("Get address from PK: ")
 
-    //### BigNumber
-    console.log("\n ************* Big Number ******************* \n")
-    let n1 = ethers.BigNumber.from("30")
-    let n2 = ethers.BigNumber.from("0x32") //50
-    console.log("Add 2 BN's: ")
-    console.log("Is BN1 smaller than BN2: ")
-    console.log("Get hex string from BN1: ") //0x1e
-    console.log("Get the number from BN2: ")
-    console.log("Add a standard number to a BN - toNumber() method must be used: ", 10 + n1.toNumber()) //40
-    console.log("Add a standard number to a BN using the add method: ", n1.add(10)) //BigNumber { value: "40" }
+    //### BigInt
+    console.log("\n ************* BigInt ******************* \n")
+    let n1 = 30n // or: n1 = BigInt("30")
+    let n2 = BigInt("0x32") //50
+    console.log("Add 2 BigInt's: ", n1 + n2)
+    console.log("Get hex string from n1: ", n1.toString(16)) //1e
+    console.log("Get the number from n2: ", Number(n2))
+    console.log("Add a standard number to a BigInt - result should be int: ") //40
+    console.log("Add a standard number to a BigInt - result should be BigInt: ") //40n
 
     //### Bytes
     console.log("\n ************* Byte Manipulation ******************* \n")
-    console.log("Get a uint8 array from a hex string 0x1234: ") // Uint8Array [ 18, 52 ]
-    //Converts a number or array to a HexString
-    console.log("Convert the number 1 to a data hex string: ") // '0x01'
-    console.log("Convert the array [1, 2] to hex: ") // '0x0102'
-    console.log("Convert the BigNumber n1 to hex: ") // '0x01'
+    console.log("Get a uint8 array from a hexstring: ") // Uint8Array [ 18, 52 ]
+    console.log("Convert the number 1 to a hexstring: ") // 0x01
+    console.log("Convert the BigInt n1 to hex: ") // 0x1e
 
     //### Constants
     console.log("\n ************* Constants ******************* \n")
     console.log("Zero address: ") //0x0000000000000000000000000000000000000000
-    console.log("1: ") //BigNumber { value: "1" }
-    console.log("Wei per Ether: ") //BigNumber { value: "1000000000000000000" }
+    console.log("Wei per Ether: ") //BigInt: 1000000000000000000n
 
     //### Display Logic and Input
     console.log("\n ************* Display Logic & Input ******************* \n")
-    const oneGwei = ethers.BigNumber.from("1000000000")
-    console.log("Get number of ETH from 1 Gwei: ") // '0.000000001'
-    console.log("Get number of Wei (=0) from 1 Gwei: ") // '1000000000'
-    console.log("Get number of Gwei (=9) from 1 Gwei: ") // '1.0'
-    console.log("Get number of Gwei (='gwei') from 1 Gwei: ") // '1.0'
+    const oneGwei = 1000000000n
+    console.log("Get number of ETH from 1 Gwei: ") // 0.000000001
+    console.log("Get number of Wei (=0) from 1 Gwei: ") // 1000000000
+    console.log("Get number of Gwei (=9) from 1 Gwei: ") // 1.0
+    console.log("Get number of Gwei (='gwei') from 1 Gwei: ") // 1.0
 
-    console.log("Get number of ETH as BN from a string (121): ") // BigNumber { value: "121000000000000000000" }
-    console.log("Get number of Gwei (=9) as BN from a string (121): ") // { BigNumber: "121000000000" }
-    console.log("Get number of Gwei (='gwei') as BN from a string (121): ")
+    console.log("Get number of ETH as BN from a string: ") // BigInt: 121000000000000000000n
+    console.log("Get number of Gwei (=9) as BN from a string: ") // BigInt: 121000000000n
+    console.log("Get number of Gwei (='gwei') as BN from a string: ") //121000000000n
 
     //### Hashing Algorithms
     console.log("\n ************* Hashing ******************* \n")
     console.log("Id of Event with args (= Event Topic): ")
-    console.log("Keccak256 of hex array [0x12, 0x34]: ") // '0x56570de...'
     console.log("Keccak256 of hex string 0x1234: ") // '0x56570de...'
     console.log("Use the id function to get the keccak256 of a string (hello): ")
     //The following provides the same result:
@@ -281,8 +273,8 @@ async function testEthersJs() {
     //User provides string data in frontend => convert to bytes32 => send to smart contract -
     //this is much cheaper than working with strings in smart contracts
     //If the length of the text below exceeds 31 bytes, it will throw an error.
-    console.log("Convert (format) a string (hello) to a bytes32 hex string") //0x68656c6c6f000000000000000000000000000000000000000000000000000000
-    console.log("Convert (parse) a bytes32 hex string to a string: ")
+    console.log("Convert (encode) a string (hello) to a bytes32 hex string") //0x68656c6c6f000000000000000000000000000000000000000000000000000000
+    console.log("Convert (decode) a bytes32 hex string to a string: ")
 
     //### Transctions
     console.log("\n ************* Transactions ******************* \n")
@@ -297,8 +289,9 @@ async function testEthersJs() {
     let txnSerialized = null
     console.log("Serialized txn (hex string): ", txnSerialized)
 
-    //Parses the transaction properties from a serialized transaction.
-    console.log("Parsed txn (txn object): ")
+    //Get the transaction properties from a serialized transaction.
+    txn = null
+    console.log("Txn properties: ", txn.to, txn.value)
 }
 
 testEthersJs()

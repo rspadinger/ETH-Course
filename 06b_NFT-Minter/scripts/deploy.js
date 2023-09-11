@@ -1,15 +1,11 @@
 async function main() {
-    const MyNFTFactory = await ethers.getContractFactory("MyNFT")
-    const myNFT = await MyNFTFactory.deploy()
+    const myNFT = await ethers.deployContract("MyNFT")
+    await myNFT.waitForDeployment()
 
-    await myNFT.deployed()
-
-    console.log("myNFT deployed to:", myNFT.address)
+    console.log("myNFT deployed to:", myNFT.target)
 }
 
-main()
-    .then(() => process.exit(0))
-    .catch((error) => {
-        console.error(error)
-        process.exit(1)
-    })
+main().catch((error) => {
+    console.error(error)
+    process.exitCode = 1
+})

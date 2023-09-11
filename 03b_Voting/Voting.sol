@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity 0.8.20;
 
 contract Voting {
     address public owner;
@@ -60,6 +60,8 @@ contract Voting {
     }
 
     function vote(uint proposal) external onlyBefore(electionEndTime) {
+        require(proposal < proposals.length, "The specified proposal does not exist");
+
         Voter storage sender = voters[msg.sender];
         require(sender.allowedToVote == true, "Has no right to vote");
         if (sender.voted) revert UserHasAlreadyVoted(msg.sender);

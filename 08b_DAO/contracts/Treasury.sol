@@ -1,20 +1,18 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Treasury is Ownable {
     uint256 public totalFunds;
-    address public payee;
     bool public isReleased;
 
-    constructor(address _payee) payable {
+    constructor() payable {
         totalFunds = msg.value;
-        payee = _payee;
         isReleased = false;
     }
 
-    function releaseFunds() public onlyOwner {
+    function releaseFunds(address payee) public onlyOwner {
         isReleased = true;
         payable(payee).transfer(totalFunds);
     }

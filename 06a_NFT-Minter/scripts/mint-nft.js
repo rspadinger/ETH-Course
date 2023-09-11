@@ -1,4 +1,4 @@
-const { REACT_APP_PRIVATE_KEY, REACT_APP_PRIVATE_KEY2, REACT_APP_CONTRACT_ADDRESS, REACT_APP_CONTRACT_ADDRESS_LOCAL } =
+const { VITE_PRIVATE_KEY, VITE_PRIVATE_KEY2, VITE_CONTRACT_ADDRESS, VITE_CONTRACT_ADDRESS_LOCAL } =
     process.env
 
 // nft-metadata.json uploaded to Pinata => contains 2 properties and an image url (also uploaded to Pinata)
@@ -42,5 +42,3 @@ async function main() {
 }
 
 main()
-
-//opensea: https://testnets.opensea.io
