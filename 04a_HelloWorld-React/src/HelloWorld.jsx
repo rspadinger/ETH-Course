@@ -5,7 +5,7 @@ import {
     connectWallet,
     loadCurrentMessage,
     updateMessage,
-} from "./util/interact.js"
+} from "./util/interact.jsx"
 
 const HelloWorld = () => {
     const [walletAddress, setWallet] = useState("")
@@ -15,20 +15,24 @@ const HelloWorld = () => {
 
     useEffect(() => {
         async function init() {
-            //### verify if a Metamask address is already connected with the app and retrieve the address and status => set wallet & status
+            //TODO verify if a Metamask address is already connected with the app and retrieve the address and status => set wallet & status
+            const { address, status } = null
+            setWallet("")
 
-            //### load current message & set message
-            const message = null
+            if (address) {
+                //TODO load current message & set message
+                const message = null
 
-            addSmartContractListener()
-            addWalletListener()
+                addSmartContractListener()
+                addWalletListener()
+            }            
         }
 
         init()
     }, [])
 
     function addSmartContractListener() {
-        //### listen to the UpdateMessage event => setMessage, setNewMessage & setStatus("🎉 Your message has been updated!")
+        //TODO listen to the UpdateMessage event => setMessage, setNewMessage & setStatus("🎉 Your message has been updated!")
     }
 
     function addWalletListener() {
@@ -56,15 +60,15 @@ const HelloWorld = () => {
     }
 
     const connectWalletPressed = async () => {
-        //### connect to Metamask and update the states
+        //TODO connect to Metamask and update the status & address
         const { address, status } = null
-
+        
         setStatus(status)
         setWallet(address)
     }
 
     const onUpdatePressed = async () => {
-        //### call updateMessage and update the state
+        //TODO call updateMessage and update the state
         const { status } = null
 
         setStatus(status)

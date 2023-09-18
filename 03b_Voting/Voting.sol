@@ -7,13 +7,13 @@ contract Voting {
     bool public electionHasEnded;
 
     struct Voter {
-        bool allowedToVote;
-        bool voted;
+        bool isAllowedToVote;
+        bool hasAlreadyVoted;
         uint vote;
     }
 
     struct Proposal {
-        uint id;
+        uint proposalIndex;
         uint voteCount;
     }
 
@@ -21,8 +21,8 @@ contract Voting {
 
     Proposal[] public proposals;
 
-    event UserHasVoted(address indexed voter, uint proposal);
-    event ElectionEnded(uint winningProposalId, uint winningVoteCount);
+    event UserHasVoted(address indexed voter, uint proposalIndex);
+    event ElectionEnded(uint winningProposalIndex, uint winningVoteCount);
 
     ///The user has already voted
     error UserHasAlreadyVoted(address voter);
@@ -44,40 +44,40 @@ contract Voting {
         _;
     }
 
-    constructor(uint[] memory proposalIds, uint votingTime) {
+    constructor(uint numberOfProposals, uint votingTime) {
         owner = msg.sender;
-        voters[owner].allowedToVote = true;
+        voters[owner].isAllowedToVote = true;
         electionEndTime = block.timestamp + votingTime;
 
-        for (uint i = 0; i < proposalIds.length; i++) {
-            proposals.push(Proposal(proposalIds[i], 0));
+        for (uint i = 0; i < numberOfProposals; i++) {
+            proposals.push(Proposal(i, 0));
         }
     }
 
     function giveRightToVote(address voter) external onlyOwner onlyBefore(electionEndTime) {
-        if (voters[voter].voted) revert UserHasAlreadyVoted(voter);
-        voters[voter].allowedToVote = true;
+        if (voters[voter].hasAlreadyVoted) revert UserHasAlreadyVoted(voter);
+        voters[voter].isAllowedToVote = true;
     }
 
-    function vote(uint proposal) external onlyBefore(electionEndTime) {
-        require(proposal < proposals.length, "The specified proposal does not exist");
+    function vote(uint proposalIndex) external onlyBefore(electionEndTime) {
+        require(proposalIndex < proposals.length, "The specified proposal does not exist");
 
-        Voter storage sender = voters[msg.sender];
-        require(sender.allowedToVote == true, "Has no right to vote");
-        if (sender.voted) revert UserHasAlreadyVoted(msg.sender);
+        Voter storage currentVoter = voters[msg.sender];
+        require(currentVoter.isAllowedToVote, "Has no right to vote");
+        if (currentVoter.hasAlreadyVoted) revert UserHasAlreadyVoted(msg.sender);
 
-        sender.voted = true;
-        sender.vote = proposal;
-        proposals[proposal].voteCount += 1;
+        currentVoter.hasAlreadyVoted = true;
+        currentVoter.vote = proposalIndex;
+        proposals[proposalIndex].voteCount += 1;
 
-        emit UserHasVoted(msg.sender, proposal);
+        emit UserHasVoted(msg.sender, proposalIndex);
     }
 
-    function winningProposal() public view returns (uint winningProposalId, uint winningVoteCount) {
+    function winningProposal() public view returns (uint winningProposalIndex, uint winningVoteCount) {
         for (uint p = 0; p < proposals.length; p++) {
             if (proposals[p].voteCount > winningVoteCount) {
                 winningVoteCount = proposals[p].voteCount;
-                winningProposalId = proposals[p].id;
+                winningProposalIndex = proposals[p].proposalIndex;
             }
         }
     }
@@ -86,7 +86,7 @@ contract Voting {
         if (electionHasEnded) revert EndElectionAlreadyCalled();
 
         electionHasEnded = true;
-        (uint winningProposalId, uint winningVoteCount) = winningProposal();
-        emit ElectionEnded(winningProposalId, winningVoteCount);
+        (uint winningProposalIndex, uint winningVoteCount) = winningProposal();
+        emit ElectionEnded(winningProposalIndex, winningVoteCount);
     }
 }

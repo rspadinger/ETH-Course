@@ -21,10 +21,10 @@ describe("Deploy contracts", function () {
         it("Should accept deposits", async function () {
             const { bankContract, bankOwner, customer } = await loadFixture(deployContractsFixture)
 
-            const bankOwnerBalance = await bankContract.balanceOf(bankOwner.address)
+            const bankOwnerBalance = await bankContract.balances(bankOwner.address)
             expect(bankOwnerBalance).to.eq(ethers.parseEther("100"))
 
-            const customerBalance = await bankContract.balanceOf(customer.address)
+            const customerBalance = await bankContract.balances(customer.address)
             expect(customerBalance).to.eq(ethers.parseEther("50"))
         })
 
@@ -33,8 +33,8 @@ describe("Deploy contracts", function () {
 
             await bankContract.withdraw()
 
-            const bankOwnerBalance = await bankContract.balanceOf(bankOwner.address)
-            const customerBalance = await bankContract.balanceOf(customer.address)
+            const bankOwnerBalance = await bankContract.balances(bankOwner.address)
+            const customerBalance = await bankContract.balances(customer.address)
 
             expect(bankOwnerBalance).to.eq(0)
             expect(customerBalance).to.eq(ethers.parseEther("50"))

@@ -36,4 +36,8 @@ contract Functions {
         uint mult = _valueA * _valueB;
         return (add, mult);
     } 
+
+    fallback() external {
+        value = 10;
+    }
 }

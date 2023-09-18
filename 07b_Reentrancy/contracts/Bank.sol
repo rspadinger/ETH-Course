@@ -6,26 +6,26 @@ pragma solidity 0.8.20;
 
 //### inherit from ReentrancyGuard
 contract Bank {
-    mapping(address => uint256) public balanceOf;
+    mapping(address => uint256) public balances;
 
     function deposit() external payable {
-        balanceOf[msg.sender] += msg.value;
+        balances[msg.sender] += msg.value;
     }
 
     //### attach nonReentrant to protect against reentracy and use the check-Effects-Inteeeraction pattern
     function withdraw() external {        
         // Check
-        uint depositedAmount = balanceOf[msg.sender];
+        uint depositedAmount = balances[msg.sender];
         require(depositedAmount > 0);
 
         // Effects
-        // balanceOf[msg.sender] = 0;
+        // balances[msg.sender] = 0;
 
         // Interaction
         (bool success, ) = msg.sender.call{value: depositedAmount}("");
         require(success, "Failed to send Ether");
 
-        balanceOf[msg.sender] = 0;
+        balances[msg.sender] = 0;
 
         //transfer method limits gas consumption in fallback function to 2300 units of gas =>
         //it is no longer recommended to use transfer

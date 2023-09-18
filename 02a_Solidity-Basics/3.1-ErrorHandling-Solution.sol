@@ -11,7 +11,7 @@ contract ErrorHandling {
     error WrongAmount(uint provided);
 
     function buySomethingFor1ETH_Require() public payable {       
-        require(msg.value != 1 ether, "Incorrect amount.");
+        require(msg.value == 1 ether, "Incorrect amount.");
         
         // code to perform the purchase...
     }

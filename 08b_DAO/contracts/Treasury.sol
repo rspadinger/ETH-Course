@@ -4,16 +4,16 @@ pragma solidity 0.8.20;
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Treasury is Ownable {
-    uint256 public totalFunds;
     bool public isReleased;
 
-    constructor() payable {
-        totalFunds = msg.value;
-        isReleased = false;
-    }
+    constructor() payable {}
 
-    function releaseFunds(address payee) public onlyOwner {
+    function releaseFunds(address payee, uint amount) public onlyOwner {
+        require(address(this).balance >= amount, "Insufficient Funds!"); 
+        
         isReleased = true;
-        payable(payee).transfer(totalFunds);
+
+        (bool success,) = payee.call{value: amount}("");
+        require(success, "Transfer Failed!");
     }
 }

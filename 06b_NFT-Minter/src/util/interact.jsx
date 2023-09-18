@@ -4,6 +4,7 @@ import { pinJSONToIPFS } from "./pinata.jsx"
 const { VITE_CONTRACT_ADDRESS, VITE_CONTRACT_ADDRESS_LOCAL } = import.meta.env
 
 let provider, contractAddress, selectedAddress
+
 ;(async function setContractAddress() {
     if (window.ethereum) {
         provider = new ethers.BrowserProvider(window.ethereum)

@@ -4,9 +4,10 @@ import { pinJSONToIPFS } from "./pinata.jsx"
 const { VITE_CONTRACT_ADDRESS, VITE_CONTRACT_ADDRESS_LOCAL } = import.meta.env
 
 let provider, contractAddress, selectedAddress
+
 ;(async function setContractAddress() {
     if (window.ethereum) {
-        //### get Browserprovider and network
+        //TODO get Browserprovider and network
         provider = null
         const currentNetwork = null
 
@@ -21,7 +22,7 @@ let provider, contractAddress, selectedAddress
 export const getCurrentWalletConnected = async () => {
     if (window.ethereum) {
         try {
-            //### get already connected accounts
+            //TODO get already connected accounts
             const addressArray = null
 
             if (addressArray.length > 0) {
@@ -63,7 +64,7 @@ export const getCurrentWalletConnected = async () => {
 export const connectWallet = async () => {
     if (window.ethereum) {
         try {
-            //### request all available accounts from MM and connect one or more of them with the DAPP
+            //TODO request all available accounts from MM and connect one or more of them with the DAPP
             const addressArray = null
 
             if (addressArray.length > 0) {
@@ -135,13 +136,14 @@ export const mintNFT = async (name, description, imageUrl) => {
     }
     const tokenURI = pinataResponse.pinataUrl
 
-    //### encode the function data for the "mintNFT" smart contract function
+    //TODO encode the function data for the "mintNFT" smart contract function
+    const myData = null
 
-    //### create the txn parameters (from, to and encoded function data)
+    //TODO create the txn parameters (from, to and encoded function data)
     const transactionParameters = {}
 
     try {
-        //### send the transaction using Metamask => eth_sendTransaction
+        //TODO send the transaction using Metamask => eth_sendTransaction
         const txHash = null
 
         return {

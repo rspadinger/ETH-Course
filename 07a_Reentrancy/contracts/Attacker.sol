@@ -3,10 +3,10 @@ pragma solidity 0.8.20;
 
 contract Attacker {
     constructor(address bankContractAddress) {
-        //### create Bank Contract
+        //TODO create Bank Contract
     }
 
-    //### function to attack the Bank smart contract
+    //TODO function to attack the Bank smart contract
 
-    //### handle the fallback function
+    //TODO call withdraw until there is no money left in the bank
 }

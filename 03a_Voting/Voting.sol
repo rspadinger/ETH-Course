@@ -4,10 +4,10 @@ pragma solidity 0.8.20;
 contract Voting {
 
     //TODO Each voter needs to be granted access to vote and can only vote once for a specific proposal => index of array: 0, 1, 2...
-    // Each proposal has an Id and holds the number of votes received
+    // Each proposal stores the index of the proposal and the number of votes received
 
    
-    //TODO During contract creation, all proposals (uint[]) are created, the contract owner is initialized
+    //TODO During contract creation, all proposals are created, the contract owner is initialized
     //  and the end of the election (electionEndTime) is defined
     constructor ... {
         

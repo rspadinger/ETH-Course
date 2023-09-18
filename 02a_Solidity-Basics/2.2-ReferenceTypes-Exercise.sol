@@ -21,7 +21,9 @@ contract Solution_ReferenceTypes {
     }
 
     function vote(uint userVote) external {
-        Voter memory myVote = Voter(true, userVote);
+        Voter memory myVote;
+        myVote.hasAlreadyVoted = true;
+        myVote.vote = userVote;
         voters[msg.sender] = myVote;
     }
 }

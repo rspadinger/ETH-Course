@@ -1,42 +1,25 @@
 // npx hardhat run scripts/interact.js --network sepolia
-const { ALCHEMY_API_KEY, PRIVATE_KEY, CONTRACT_ADDRESS, CONTRACT_ADDRESS_LOCAL, ACCOUNT2 } = process.env
+const { PRIVATE_KEY, CONTRACT_ADDRESS, CONTRACT_ADDRESS_LOCAL } = process.env
 
 const contractJson = require("../artifacts/contracts/HelloWorld.sol/HelloWorld.json")
 
-let provider, signer, signerAddress, account2Address, contract, contractAddress, currentNetwork, isLocalNetwork
+let provider, signer, signerAddress, account2Address, contract, contractAddress, isLocalNetwork
 let txnParams, txn, txnReceipt
 let newMessage, iface, encodedFunction
 
 async function testEthersJs() {
     //########################## SETUP #################################################
 
+    isLocalNetwork = true
+    contractAddress = CONTRACT_ADDRESS_LOCAL
+
     provider = ethers.provider
-    currentNetwork = await provider.getNetwork()
 
-    if (currentNetwork.chainId.toString().includes(1337)) {
-        //we are on a local network: Ganache, Hardhat...
-        contractAddress = CONTRACT_ADDRESS_LOCAL
-        isLocalNetwork = true
+    const [signer1, signer2] = await ethers.getSigners()
+    signerAddress = signer1.address
+    account2Address = signer2.address
 
-        const [signer1, signer2] = await ethers.getSigners()
-        //signer = await provider.getSigner()
-        signerAddress = signer1.address
-        account2Address = signer2.address
-
-        contract = await ethers.getContractAt("HelloWorld", CONTRACT_ADDRESS_LOCAL)
-    } else {
-        //we are on a remote network
-        contractAddress = CONTRACT_ADDRESS
-        isLocalNetwork = false
-
-        signer = new ethers.Wallet(PRIVATE_KEY, provider)
-        //;[signer] = await ethers.getSigners()
-        signerAddress = await signer.getAddress()
-        account2Address = ACCOUNT2
-
-        contract = new ethers.Contract(CONTRACT_ADDRESS, contractJson.abi, signer)
-        //contract = await ethers.getContractAt("HelloWorld", CONTRACT_ADDRESS)
-    }
+    contract = await ethers.getContractAt("HelloWorld", CONTRACT_ADDRESS_LOCAL)
 
     //########################## PROVIDER ##############################################
 
@@ -65,11 +48,11 @@ async function testEthersJs() {
     //console.log("Provider: ", provider)
 
     //### Provider methods
-    console.log("Get the network the provider is connected to: ", await provider.getNetwork())
+    console.log("Get the network chainId the provider is connected to: ", (await provider.getNetwork()).chainId)
     console.log("Get balance of any account: ", await provider.getBalance(signerAddress))
     console.log("Balance in ETH: ", ethers.formatEther(await provider.getBalance(signerAddress)))
     console.log("Txn count for any account: ", await provider.getTransactionCount(signerAddress))
-    console.log("Block Number of most recently mined block: ", await provider.getBlockNumber())
+    console.log("Block Number of latest block: ", await provider.getBlockNumber())
     console.log("Get current fee data: ", await provider.getFeeData())
 
     //########################## SIGNER ##############################################
@@ -129,7 +112,7 @@ async function testEthersJs() {
 
     // get the raw data
     //console.log("Txn Response Data: ", txn.data)
-    //console.log("Txn Receipt Log Data: ", txnReceipt.logs[0].data)
+    //console.log("Txn Receipt Log Data: ", txnReceipt.logs[0])
 
     //########################## CONTRACT ##############################################
 
@@ -157,7 +140,7 @@ async function testEthersJs() {
     txn = await contract.updateMessage(newMessage)
     txnReceipt = await txn.wait()
     console.log("Message after send txn: " + (await contract.message()))
-    //console.log("Txn receipt: ", txnReceipt)
+    console.log("Txn receipt: ", txnReceipt)
 
     //########################## LOGS AND EVENTS FROM PROVIDER & CONTRACT #######################################
 
@@ -226,7 +209,7 @@ async function testEthersJs() {
     let sigHash = ifaceCompleteABI.getFunction("updateMessage").selector
     console.log("Function sig hash: ", sigHash)
 
-    //decode provided argument values from tx.data => returns: [ '7099', newMessage: '7099' ]
+    //decode provided argument values from tx.data => returns provided arguments
     let argValues = ifaceCompleteABI.decodeFunctionData("updateMessage", txn.data)
     console.log("Decoded argument values: ", argValues)
 
@@ -241,8 +224,9 @@ async function testEthersJs() {
         "0x393bbe2c5115b2370579ad2f520ee8319935cff3b04145a3246b8c8c7730dc73",
         "0x000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb92266",
     ]
-    parsedTxn = ifaceCompleteABI.parseLog({ data: txnReceipt.logs[0].data, topics })
-    console.log("Parsed log: ", parsedTxn)
+
+    let parsedLog = ifaceCompleteABI.parseLog({ data: txnReceipt.logs[0].data, topics })
+    console.log("Parsed log: ", parsedLog)
 
     //### Address
     console.log("\n ************* Address Functions ******************* \n")
@@ -265,8 +249,8 @@ async function testEthersJs() {
 
     //### Bytes
     console.log("\n ************* Byte Manipulation ******************* \n")
-    console.log("Get a uint8 array from a hexstring: ", ethers.getBytes("0x1234")) // Uint8Array [ 18, 52 ]
-    console.log("Convert the number 1 to a hexstring: ", ethers.toBeHex(1)) // 0x01
+    console.log("Get a uint8 array from a hexstring - 0x1234: ", ethers.getBytes("0x1234")) // Uint8Array [ 18, 52 ]
+    console.log("Convert the number 1 to a hex: ", ethers.toBeHex(1)) // 0x01
     console.log("Convert the BigInt n1 to hex: ", ethers.toBeHex(n1)) // 0x1e
 
     //### Constants
@@ -282,9 +266,9 @@ async function testEthersJs() {
     console.log("Get number of Gwei (=9) from 1 Gwei: ", ethers.formatUnits(oneGwei, 9)) // 1.0
     console.log("Get number of Gwei (='gwei') from 1 Gwei: ", ethers.formatUnits(oneGwei, "gwei")) // 1.0
 
-    console.log("Get number of ETH as BN from a string: ", ethers.parseEther("121")) // BigInt: 121000000000000000000n
-    console.log("Get number of Gwei (=9) as BN from a string: ", ethers.parseUnits("121", 9)) // BigInt: 121000000000n
-    console.log("Get number of Gwei (='gwei') as BN from a string: ", ethers.parseUnits("121", "gwei")) //121000000000n
+    console.log("Get number of wei from ETH (as string): ", ethers.parseEther("121")) // 121000000000000000000n
+    console.log("Get number of wei from specified Gwei (=9) amount (as string): ", ethers.parseUnits("121", 9)) // 121000000000n
+    console.log("Get number of wei from specified Gwei (='gwei') amount: ", ethers.parseUnits("121", "gwei")) // 121000000000n
 
     //### Hashing Algorithms - return DataHexString32
     console.log("\n ************* Hashing ******************* \n")
@@ -298,19 +282,19 @@ async function testEthersJs() {
     console.log("Get keccak258 of UTF8 byte array: ", ethers.keccak256(ethers.toUtf8Bytes("hello")))
 
     //### Strings
+    //User provides string data in frontend => convert to bytes32 => send to smart contract -
+    //this is much cheaper than working with strings in smart contracts
+    //If the length of the text below exceeds 31 bytes, it will throw an error.
+    console.log("Convert (encode) a string to a bytes32 hex string", ethers.encodeBytes32String("hello"))
+    console.log(
+        "Convert (decode) a bytes32 hex string to a string: ",
+        ethers.decodeBytes32String("0x68656c6c6f000000000000000000000000000000000000000000000000000000")
+    )
+
     console.log("\n ************* String Manipulation ******************* \n")
     //If needed, convert strings to bytes first:
     console.log("Convert string to UTF8 byte array: ", ethers.toUtf8Bytes("hello")) // Uint8Array [ 104, 101, 108, 108, 111 ]
     console.log("Convert UTF8 byte array to string: ", ethers.toUtf8String(new Uint8Array([104, 101, 108, 108, 111]))) // hello
-
-    //User provides string data in frontend => convert to bytes32 => send to smart contract -
-    //this is much cheaper than working with strings in smart contracts
-    //If the length of the text below exceeds 31 bytes, it will throw an error.
-    console.log("Convert a string to a bytes32 hex string", ethers.encodeBytes32String("hello"))
-    console.log(
-        "Convert a bytes32 hex string to a string: ",
-        ethers.decodeBytes32String("0x68656c6c6f000000000000000000000000000000000000000000000000000000")
-    )
 
     //### Transctions
     console.log("\n ************* Transactions ******************* \n")

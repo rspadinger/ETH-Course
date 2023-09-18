@@ -1,19 +1,19 @@
-//### import ethers, contractJson
+//TODO import ethers, contractJson
 
 const { VITE_CONTRACT_ADDRESS } = import.meta.env
 
-//### set the provider
+//TODO set the provider
 
-//### export the contract
+//TODO export the contract
 
 export const getCurrentWalletConnected = async () => {
-    //### verify if MM is installed
+    //TODO verify if MM is installed
     if (false) {
         try {
-            //### get already connected Metamask accounts => eth_accounts
+            //TODO get already connected Metamask accounts => eth_accounts
             const addressArray = null
 
-            //### log a message whenever the network or an account changes => accountsChanged & chainChanged
+            //TODO log a message whenever the network or an account changes => accountsChanged & chainChanged
 
             if (addressArray.length > 0) {
                 return {
@@ -51,10 +51,10 @@ export const getCurrentWalletConnected = async () => {
 }
 
 export const connectWallet = async () => {
-    //### verify if MM is installed
+    //TODO verify if MM is installed
     if (false) {
         try {
-            //### get all addresses from metamask => eth_requestAccounts
+            //TODO get all addresses from metamask => eth_requestAccounts
             const addressArray = null
 
             if (addressArray.length > 0) {
@@ -92,7 +92,7 @@ export const connectWallet = async () => {
     }
 }
 
-//### loadCurrentMessage
+//TODO loadCurrentMessage
 
 export const updateMessage = async (address, message) => {
     if (!window.ethereum || address === null) {
@@ -107,13 +107,15 @@ export const updateMessage = async (address, message) => {
         }
     }
 
-    //### encode the function we want to call
+    //TODO encode the function we want to call
+    const myData = null
 
-    //### set up transaction parameters => transactionParameters : to, from, data
+    //TODO set up transaction parameters => transactionParameters : to, from, data
     const transactionParameters = null
 
     try {
-        //### send the transaction using Metamask => eth_sendTransaction , return txHash
+        //TODO send the transaction using Metamask => eth_sendTransaction , return txHash
+        const txHash = null
 
         return {
             status: (

@@ -22,7 +22,7 @@ contract C1 {
 
 
 //TODO Create a contract C4 that inherits from C2 and C3 (in that order)
-contract C4 is C2, C3 {   
+//contract ... {   
     
 
     //TODO Add a function (callF3) to C4 that returns the result of f3 – what is the return value and why?
@@ -31,4 +31,4 @@ contract C4 is C2, C3 {
     //TODO Add a function (callSuperF3) to C4 that returns the result of the call to: 
     // super.f3() – what is the return value and why?
     
-}
+//}

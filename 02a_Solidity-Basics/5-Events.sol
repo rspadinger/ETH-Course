@@ -13,5 +13,8 @@ contract Events {
     //TODO Create a function (deposit) that allows users to deposit funds. 
     // Revert the functions if no funds are deposited. 
     // Update the user balance and emit the "Deposit" event.
+
+
+    //TODO add a simple receive function that emits a "Received" event that logs the address of the sender and the amount that was received
     
 }

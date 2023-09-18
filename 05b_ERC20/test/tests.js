@@ -23,8 +23,6 @@ describe("MyToken contract", function () {
         it("Should return correct ETH account balance for user after calling setBalance", async function () {
             const { user } = await loadFixture(deployContractFixture)
 
-            //initial ETH account balance: 10000
-            expect(await ethers.provider.getBalance(user.address)).to.eq(ethers.parseEther("10000"))
             await setBalance(user.address, 1n * 10n ** 18n)
             expect(await ethers.provider.getBalance(user.address)).to.eq(ethers.parseEther("1"))
         })

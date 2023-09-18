@@ -23,5 +23,8 @@ contract Functions {
 
     //TODO Create a function (addAndMultiply) that takes 2 uint's as arguments and 
     // returns the product and the sum of those arguments
+
+
+    //TODO add a simple fallback function that changes "value" to 10
     
 }

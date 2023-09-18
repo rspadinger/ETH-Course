@@ -132,6 +132,7 @@ export const updateMessage = async (address, message) => {
             method: "eth_sendTransaction",
             params: [transactionParameters],
         })
+
         return {
             status: (
                 <span>

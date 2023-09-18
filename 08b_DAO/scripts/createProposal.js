@@ -32,8 +32,8 @@ async function createProposal() {
     const governance = await ethers.getContractAt("Governance", contractAddresses.governanceAddress)
 
     //encode the releaseFunds function from the treasury contract => required for the proposal
-    const iface = new ethers.Interface(["function releaseFunds(address payee)"])
-    const encodedReleaseFunds = iface.encodeFunctionData("releaseFunds", [payee.address])
+    const iface = new ethers.Interface(["function releaseFunds(address payee, uint amount)"])
+    const encodedReleaseFunds = iface.encodeFunctionData("releaseFunds", [payee.address, ethers.parseEther("10")])
     const description = getRandomNumberString() // "Release Funds from Treasury"
 
     //create a proposal (contains 1 action) => target: address of treasury, value: 0, calldata: encoded "releaseFunds" function

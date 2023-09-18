@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-//make this contract Ownable
+//TODO make this contract Ownable
 contract Treasury {
-    //define public state variables for totalFunds and isReleased
+    //TODO define public state variable: isReleased
 
-    //receives funds 
-    constructor() {}
+    //TODO contract receives funds during deployment 
 
-    //only the owner can call this
-    function releaseFunds() public {}
+    //TODO only the owner can call this => 
+    // make sure "amount is available, modify isReleased flag & send funds
+    function releaseFunds(address payee, uint amount) public {}
 }
