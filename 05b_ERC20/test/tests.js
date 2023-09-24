@@ -20,13 +20,6 @@ describe("MyToken contract", function () {
             expect(await myTokenContract.balanceOf(user.address)).to.eq(ethers.parseEther("10"))
         })
 
-        it("Should return correct ETH account balance for user after calling setBalance", async function () {
-            const { user } = await loadFixture(deployContractFixture)
-
-            await setBalance(user.address, 1n * 10n ** 18n)
-            expect(await ethers.provider.getBalance(user.address)).to.eq(ethers.parseEther("1"))
-        })
-
         it("Should revert when transferring tokens to zero address", async function () {
             const { myTokenContract } = await loadFixture(deployContractFixture)
 
@@ -65,10 +58,8 @@ describe("MyToken contract", function () {
                 [-1000, 1000]
             )
         })
-    })
 
-    describe("Testing Hardhat Network Helpers", function () {
-        it("Should return correct token supply", async function () {
+        it("Should return correct token supply - support for BigInt", async function () {
             const { myTokenContract, deployer, user } = await loadFixture(deployContractFixture)
 
             const totalSupply = await myTokenContract.totalSupply()
@@ -76,12 +67,14 @@ describe("MyToken contract", function () {
             expect(totalSupply).to.eq(100000n * 10n ** 18n)
             expect(totalSupply).to.eq(1_000_000_000_000_000_000_000_00n)
         })
+    })
 
-        it("Should attribute totalSupply to deployer account ", async function () {
-            const { myTokenContract, deployer, user } = await loadFixture(deployContractFixture)
+    describe("Testing Hardhat Network Helpers", function () {
+        it("Should return correct ETH account balance for user after calling setBalance", async function () {
+            const { user } = await loadFixture(deployContractFixture)
 
-            const ownerBalance = await myTokenContract.balanceOf(deployer.address)
-            expect(await myTokenContract.totalSupply()).to.equal(ownerBalance)
+            await setBalance(user.address, 1n * 10n ** 18n)
+            expect(await ethers.provider.getBalance(user.address)).to.eq(ethers.parseEther("1"))
         })
     })
 })
