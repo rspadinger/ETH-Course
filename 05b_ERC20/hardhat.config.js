@@ -5,7 +5,7 @@ const { ALCHEMY_API_URL, PRIVATE_KEY } = process.env
 
 module.exports = {
     solidity: "0.8.20",
-    defaultNetwork: "localhost",
+    defaultNetwork: "hardhat",
     networks: {
         sepolia: {
             url: ALCHEMY_API_URL,

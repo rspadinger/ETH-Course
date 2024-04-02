@@ -4,7 +4,8 @@
     "description": "",
     "devDependencies": {
         "@nomicfoundation/hardhat-toolbox": "^3.0.0",
-        "hardhat": "^2.17.2"
+        "hardhat": "^2.17.2",
+        "hardhat-gas-reporter": "^1.0.9"
     },
     "dependencies": {
         "@openzeppelin/contracts": "^4.9.3",

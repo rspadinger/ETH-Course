@@ -1,0 +1,26 @@
+strict digraph {
+subgraph cluster_318_Voting {
+label = "Voting"
+"318_endElection" [label="endElection"]
+"318_giveRightToVote" [label="giveRightToVote"]
+"318_winningProposal" [label="winningProposal"]
+"318_test" [label="test"]
+"318_vote" [label="vote"]
+"318_constructor" [label="constructor"]
+"318_endElection" -> "318_winningProposal"
+"318_giveRightToVote" -> "318_onlyOwner"
+"318_vote" -> "318_onlyBefore"
+"318_giveRightToVote" -> "318_onlyBefore"
+"318_endElection" -> "318_onlyAfter"
+"318_endElection" -> "318_onlyOwner"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"require(bool,string)" 
+"revert EndElectionAlreadyCalled()" 
+"revert UserHasAlreadyVoted(address)" 
+"318_vote" -> "require(bool,string)"
+"318_vote" -> "revert UserHasAlreadyVoted(address)"
+"318_giveRightToVote" -> "revert UserHasAlreadyVoted(address)"
+"318_endElection" -> "revert EndElectionAlreadyCalled()"
+}
+}

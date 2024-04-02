@@ -1,0 +1,52 @@
+digraph{
+0[label="Node Type: ENTRY_POINT 0
+"];
+0->5;
+1[label="Node Type: IF 1
+
+EXPRESSION:
+voters[voter].hasAlreadyVoted
+
+IRs:
+REF_5(Voting.Voter) -> voters[voter]
+REF_6(bool) -> REF_5.hasAlreadyVoted
+CONDITION REF_6"];
+1->2[label="True"];
+1->3[label="False"];
+2[label="Node Type: EXPRESSION 2
+
+EXPRESSION:
+revert UserHasAlreadyVoted(address)(voter)
+
+IRs:
+TMP_7(None) = SOLIDITY_CALL revert UserHasAlreadyVoted(address)(voter)"];
+2->3;
+3[label="Node Type: END_IF 3
+"];
+3->4;
+4[label="Node Type: EXPRESSION 4
+
+EXPRESSION:
+voters[voter].isAllowedToVote = true
+
+IRs:
+REF_7(Voting.Voter) -> voters[voter]
+REF_8(bool) -> REF_7.isAllowedToVote
+REF_8(bool) (->voters) := True(bool)"];
+5[label="Node Type: EXPRESSION 5
+
+EXPRESSION:
+onlyOwner()
+
+IRs:
+MODIFIER_CALL, Voting.onlyOwner()()"];
+5->6;
+6[label="Node Type: EXPRESSION 6
+
+EXPRESSION:
+onlyBefore(electionEndTime)
+
+IRs:
+MODIFIER_CALL, Voting.onlyBefore(uint256)(electionEndTime)"];
+6->1;
+}

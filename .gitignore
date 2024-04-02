@@ -23,3 +23,5 @@ yarn-error.log*
 #Test files
 zzz.js
 zzz.sol
+
+.dot
