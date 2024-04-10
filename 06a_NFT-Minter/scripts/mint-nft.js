@@ -34,8 +34,7 @@ async function main() {
 
     //TODO transfer (safeTransferFrom) the NFT with Id = 1 to another account => swap signer and signer2 on the method call below
     //if we want to transfer it back, we also need to change the signer => safeTransfer requires :: from == owner && msg.sender == owner
-    //the ERC721 contract provides 2 methods with the name: safeTransferFrom => therefore we can't use: contract.safeTransferFrom...
-    //we must use: contract["safeTransferFrom(address,address,uint256)"](args...)
+    
 
     //TODO display the owner of NFT with Id = 1
     console.log("New owner of NFT with Id 1: ")

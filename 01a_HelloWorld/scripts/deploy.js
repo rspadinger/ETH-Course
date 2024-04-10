@@ -7,7 +7,4 @@ async function main() {
     console.log("HelloWorld deployed to:", helloWorld.target)
 }
 
-main().catch((error) => {
-    console.error(error)
-    process.exitCode = 1
-})
+main()

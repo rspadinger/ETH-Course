@@ -79,9 +79,6 @@ async function createProposal() {
     proposalState = await governance.state(id)
     console.log(`Current state of proposal: ${proposalState.toString()} (Active) \n`)
 
-    // NOTE: Transfer serves no purposes, it's just used to fast foward one block after the voting period ends
-    await govToken.connect(executor).transfer(proposer.address, 1)
-
     //display the vote distribution
     const { againstVotes, forVotes, abstainVotes } = await governance.proposalVotes(id)
     console.log(`Votes For: ${ethers.formatEther(forVotes.toString())}`)

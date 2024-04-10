@@ -103,7 +103,7 @@ export const connectWallet = async () => {
     }
 }
 
-//image: https://gateway.pinata.cloud/ipfs/Qmd17pF2uHL1ZocvZi6yH4651ka6wNRUcMsDBW9mc14J1H
+//image: https://gateway.pinata.cloud/ipfs/QmcSM8rxpnmknRu6HX9KWmqG4QJaBfijF3sZeuvSeDfNB7
 export const mintNFT = async (name, description, imageUrl) => {
     if (name.trim() === "" || description.trim() === "" || imageUrl.trim() === "") {
         return {
@@ -113,6 +113,7 @@ export const mintNFT = async (name, description, imageUrl) => {
     }
 
     //https://docs.pinata.cloud/pinata-api/pinning/pin-json
+    //https://docs.opensea.io/docs/metadata-standards
     const metadata = {
         pinataMetadata: {
             name: "Cat NFT",

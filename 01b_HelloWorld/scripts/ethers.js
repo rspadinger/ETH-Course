@@ -126,9 +126,9 @@ async function testEthersJs() {
     }
     //console.log("Contract: ", contract)
 
-    //### call a read-only function with overrides
+    //### call a read-only function
     try {
-        const message = await contract.message({ gasLimit: 200000 })
+        const message = await contract.message()
         console.log("The message is: " + message)
     } catch (err) {
         console.log("Error: ", err.reason, err.error)
@@ -137,7 +137,7 @@ async function testEthersJs() {
     //### call a write function
     console.log("Message before send txn: ", await contract.message())
     newMessage = getRandomNumberString()
-    txn = await contract.updateMessage(newMessage)
+    txn = await contract.updateMessage(newMessage, { gasLimit: 200000 })
     txnReceipt = await txn.wait()
     console.log("Message after send txn: " + (await contract.message()))
     console.log("Txn receipt: ", txnReceipt)
@@ -175,17 +175,17 @@ async function testEthersJs() {
     console.log("Log (Contract) arguments: ", logs[0].args)
 
     //### listen to events - Contract => independant of blockNumber - we only get the latest event
-    // contract.on(filter, (from, oldMessage, newMessage, event) => {
-    //     console.log("New event emitted (Contract): ", event)
-    // console.log(
-    //     "Emitted event arguments (Contract): ",
-    //     from,
-    //     oldMessage,
-    //     newMessage,
-    //     " --- Access via event.args[i]: ",
-    //     event.args[0]
-    // )
-    // })
+    contract.on("UpdateMessage", (from, oldMessage, newMessage, event) => {
+        //console.log("New event emitted (Contract): ", event)
+        console.log(
+            "Emitted event arguments (Contract): ",
+            from,
+            oldMessage,
+            newMessage,
+            " --- Access via event.args[i]: ",
+            event.args[0]
+        )
+    })
 
     //########################## UTILS ##############################################
 
@@ -196,13 +196,13 @@ async function testEthersJs() {
 
     //get the function fragments: type, name, inputs, outputs...
     //console.log("All functions: ", ifaceCompleteABI.functions)
-    console.log("Update function: ", ifaceCompleteABI.getFunction("updateMessage"))
+    //console.log("Update function: ", ifaceCompleteABI.getFunction("updateMessage"))
 
     //### Encoding & Decoding
     console.log("\n ************* Encoding & Decoding ******************* \n")
     encodedFunction = ifaceUpdate.encodeFunctionData("updateMessage", ["test message"])
     //Or:
-    encodedFunction = ifaceCompleteABI.encodeFunctionData("updateMessage", ["test"])
+    //encodedFunction = ifaceCompleteABI.encodeFunctionData("updateMessage", ["test"])
     console.log("Encoded function data: ", encodedFunction)
 
     //get the sigHash or function selector (4 bytes) => allows to perform dynamic invocation of a function
@@ -234,24 +234,26 @@ async function testEthersJs() {
         "Address from 0x8ba1f109551bd432803012645ac136ddd64dba72: ",
         ethers.getAddress("0x8ba1f109551bd432803012645ac136ddd64dba72")
     )
+
     //get address from PK: add 0x in front of PK
     console.log("Get address from PK: ", ethers.computeAddress("0x" + PRIVATE_KEY))
 
-    //### BigInt
-    console.log("\n ************* BigInt ******************* \n")
+    //### Bytes
     let n1 = 30n // or: n1 = BigInt("30")
     let n2 = BigInt("0x32") //50
-    console.log("Add 2 BigInt's: ", n1 + n2)
-    console.log("Get hex string from n1: ", n1.toString(16)) //1e
-    console.log("Get the number from n2: ", Number(n2))
-    console.log("Add a standard number to a BigInt - result should be int: ", 10 + Number(n1)) //40
-    console.log("Add a standard number to a BigInt - result should be BigInt: ", n1 + 10n) //40n
 
-    //### Bytes
     console.log("\n ************* Byte Manipulation ******************* \n")
     console.log("Get a uint8 array from a hexstring - 0x1234: ", ethers.getBytes("0x1234")) // Uint8Array [ 18, 52 ]
     console.log("Convert the number 1 to a hex: ", ethers.toBeHex(1)) // 0x01
     console.log("Convert the BigInt n1 to hex: ", ethers.toBeHex(n1)) // 0x1e
+
+    //### BigInt
+    console.log("\n ************* BigInt ******************* \n")
+    console.log("Add 2 BigInt's: ", n1 + n2)
+    console.log("Get hex string from 16: ", n1.toString(16)) //1e
+    console.log("Get the number from n2: ", Number(n2))
+    console.log("Add a standard number (10) to a BigInt (n1) - result should be int: ", 10 + Number(n1)) //40
+    console.log("Add a BigInt (n1) to a BigInt (10) - result should be BigInt: ", n1 + 10n) //40n
 
     //### Constants
     console.log("\n ************* Constants ******************* \n")
@@ -266,14 +268,14 @@ async function testEthersJs() {
     console.log("Get number of Gwei (=9) from 1 Gwei: ", ethers.formatUnits(oneGwei, 9)) // 1.0
     console.log("Get number of Gwei (='gwei') from 1 Gwei: ", ethers.formatUnits(oneGwei, "gwei")) // 1.0
 
-    console.log("Get number of wei from ETH (as string): ", ethers.parseEther("121")) // 121000000000000000000n
-    console.log("Get number of wei from specified Gwei (=9) amount (as string): ", ethers.parseUnits("121", 9)) // 121000000000n
-    console.log("Get number of wei from specified Gwei (='gwei') amount: ", ethers.parseUnits("121", "gwei")) // 121000000000n
+    console.log("Get number of wei from 121 ETH (as string): ", ethers.parseEther("121")) // 121000000000000000000n
+    console.log("Get number of wei from 121 Gwei (=9) amount (as string): ", ethers.parseUnits("121", 9)) // 121000000000n
+    console.log("Get number of wei from 121 Gwei (='gwei') amount: ", ethers.parseUnits("121", "gwei")) // 121000000000n
 
     //### Hashing Algorithms - return DataHexString32
     console.log("\n ************* Hashing ******************* \n")
     console.log(
-        "Id (KECCAK256 of text) of Event with args = Event Topic): ",
+        "Id (KECCAK256 of text) of Event with args = Event Topic: ",
         ethers.id("UpdateMessage(address,string,string)")
     )
     console.log("Keccak256 of hex string: ", ethers.keccak256("0x1234")) // '0x56570de...'
@@ -282,16 +284,18 @@ async function testEthersJs() {
     console.log("Get keccak258 of UTF8 byte array: ", ethers.keccak256(ethers.toUtf8Bytes("hello")))
 
     //### Strings
+    console.log("\n ************* String Manipulation ******************* \n")
+
     //User provides string data in frontend => convert to bytes32 => send to smart contract -
     //this is much cheaper than working with strings in smart contracts
     //If the length of the text below exceeds 31 bytes, it will throw an error.
+
     console.log("Convert (encode) a string to a bytes32 hex string", ethers.encodeBytes32String("hello"))
     console.log(
         "Convert (decode) a bytes32 hex string to a string: ",
         ethers.decodeBytes32String("0x68656c6c6f000000000000000000000000000000000000000000000000000000")
     )
 
-    console.log("\n ************* String Manipulation ******************* \n")
     //If needed, convert strings to bytes first:
     console.log("Convert string to UTF8 byte array: ", ethers.toUtf8Bytes("hello")) // Uint8Array [ 104, 101, 108, 108, 111 ]
     console.log("Convert UTF8 byte array to string: ", ethers.toUtf8String(new Uint8Array([104, 101, 108, 108, 111]))) // hello
@@ -311,7 +315,7 @@ async function testEthersJs() {
 
     //Get the transaction properties from a serialized transaction.
     txn = ethers.Transaction.from(txnSerialized)
-    console.log("Txn properties: ", txn.to, txn.value)
+    console.log("Txn properties: ", txn.to, txn.value, txn.data)
 }
 
 testEthersJs()

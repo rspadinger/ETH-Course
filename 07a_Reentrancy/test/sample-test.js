@@ -3,7 +3,7 @@ const { loadFixture } = require("@nomicfoundation/hardhat-network-helpers")
 
 describe("Deploy contracts", function () {
     async function deployContractsFixture() {
-        const [bankOwner, customer, attacker] = await ethers.getSigners()
+        const [bankOwner, customer] = await ethers.getSigners()
 
         const bankContract = await ethers.deployContract("Bank")
         await bankContract.waitForDeployment()
@@ -31,13 +31,13 @@ describe("Deploy contracts", function () {
         it("Should accept withdrawals", async function () {
             const { bankContract, bankOwner, customer } = await loadFixture(deployContractsFixture)
 
-            await bankContract.withdraw()
+            await bankContract.connect(customer).withdraw()
 
             const bankOwnerBalance = await bankContract.balanceOf(bankOwner.address)
             const customerBalance = await bankContract.balanceOf(customer.address)
 
-            expect(bankOwnerBalance).to.eq(0)
-            expect(customerBalance).to.eq(ethers.parseEther("50"))
+            expect(bankOwnerBalance).to.eq(ethers.parseEther("50"))
+            expect(customerBalance).to.eq(0)
         })
 
         it("Perform Attack", async function () {

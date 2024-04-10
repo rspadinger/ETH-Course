@@ -1,7 +1,7 @@
 const fs = require("fs")
 
 async function main() {
-    const [executor, proposer, voter1, voter2, voter3, voter4, voter5, payee] = await ethers.getSigners()
+    const [executor, proposer, voter1, voter2, voter3, voter4, voter5] = await ethers.getSigners()
 
     // Deploy GovToken
     const govToken = await ethers.deployContract("GovToken")
@@ -28,7 +28,7 @@ async function main() {
         minDelay,
         [proposer.address],
         [executor.address],
-        executor.address,
+        ethers.ZeroAddress,
     ])
     await timeLock.waitForDeployment()
     const timeLockAddress = timeLock.target

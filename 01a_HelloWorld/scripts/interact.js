@@ -9,7 +9,8 @@ async function main() {
     if (currentNetwork.chainId.toString().includes(1337)) {
         console.log("We are using a local network!")
 
-        //TODO get a contract instance
+        //get a contract instance
+        contract = await ethers.getContractAt("HelloWorld", CONTRACT_ADDRESS_LOCAL)
 
     } else {
         console.log("We are using a remote network!")
@@ -19,13 +20,14 @@ async function main() {
     }
 
     //TODO get the value of message
-    console.log("The message is: ")
+    console.log("The message is: ", await contract.message())
 
-    //TODO update message, show txn receipt and display updated message
+    //TODO update message, show txn receipt and display updated message  
     console.log("Updating the message...")
+    txn = ...
+    const txnReceipt = await txn.wait()
 
-    //TODO log the txn receipt 
-    console.log("Txn receipt: ")
+    console.log("Txn receipt: ", txnReceipt)
 
     //TODO display updated message
     console.log("The updatd message is: ")

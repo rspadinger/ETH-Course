@@ -7,7 +7,7 @@ const {
 } = process.env
 
 // nft-metadata.json uploaded to Pinata => contains 2 properties and an image url (also uploaded to Pinata)
-const tokenURI = "https://gateway.pinata.cloud/ipfs/QmeoRUqCTsPE1e2MePKgZhVzzSRUuZp2ADYt8M4mZhcMXu"
+const tokenURI = "https://gateway.pinata.cloud/ipfs/QmPzekhpuWN2j5yXome5dJYHy2KYHmPBdZ4qKiNbjgqRpz"
 
 let provider, signer, signer2, contract, txn, txnReceipt
 
@@ -57,10 +57,11 @@ async function main() {
     //if we want to transfer it back, we also need to change the signer => safeTransfer requires :: from == owner && msg.sender == owner
     contract = await contract.connect(signer2)
 
-    //https://stackoverflow.com/questions/68289806/no-safetransferfrom-function-in-ethers-js-contract-instance
     //use this on methods with the same name
     //console.log("Contract: ", contract)
-    txn = await contract["safeTransferFrom(address,address,uint256)"](signer2.address, signer.address, 1)
+    //ethers.js < v5.0 => for overridden functions
+    //txn = await contract["safeTransferFrom(address,address,uint256)"](signer2.address, signer.address, 1)
+    txn = await contract.safeTransferFrom(signer2.address, signer.address, 1)
     txnReceipt = await txn.wait()
 
     console.log("New owner of NFT with Id 1: ", await contract.ownerOf(1))
