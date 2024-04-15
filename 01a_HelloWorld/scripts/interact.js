@@ -10,7 +10,6 @@ async function main() {
         console.log("We are using a local network!")
 
         //get a contract instance
-        contract = await ethers.getContractAt("HelloWorld", CONTRACT_ADDRESS_LOCAL)
 
     } else {
         console.log("We are using a remote network!")
@@ -20,12 +19,12 @@ async function main() {
     }
 
     //TODO get the value of message
-    console.log("The message is: ", await contract.message())
+    console.log("The message is: ")
 
     //TODO update message, show txn receipt and display updated message  
     console.log("Updating the message...")
     txn = ...
-    const txnReceipt = await txn.wait()
+    const txnReceipt = ...
 
     console.log("Txn receipt: ", txnReceipt)
 
