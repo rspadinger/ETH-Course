@@ -2,7 +2,7 @@
 
 const { VITE_CONTRACT_ADDRESS } = import.meta.env
 
-//TODO set the provider
+//TODO set the provider and signer
 
 //TODO export the contract
 
@@ -116,6 +116,8 @@ export const updateMessage = async (address, message) => {
     try {
         //TODO send the transaction using Metamask => eth_sendTransaction , return txHash
         const txHash = null
+
+        //TODO alternative way (without using eth_sendTransaction) => call "updateMessage" directly on the contract instance
 
         return {
             status: (

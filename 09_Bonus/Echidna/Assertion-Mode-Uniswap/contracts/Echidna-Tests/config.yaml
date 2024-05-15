@@ -1,0 +1,10 @@
+testMode: assertion
+coverage: true
+coverageFormats: ["txt"]
+corpusDir: "corpus"
+testLimit: 1000
+seqLen: 25
+
+# whitelist example => not required, because we only have 1 test function
+filterBlacklist: false
+filterFunctions: ["EchidnaTest.testProvideLiquidity(uint256,uint256)"]

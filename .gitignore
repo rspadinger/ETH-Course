@@ -16,6 +16,11 @@ typechain
 cache
 artifacts
 
+#Echidna files
+crytic-export
+corpus
+crytic
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

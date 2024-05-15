@@ -1,0 +1,9 @@
+[submodule "09_Bonus/FoundryTest/lib/forge-std"]
+	path = 09_Bonus/FoundryTest/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "09_Bonus/FoundryTest/lib/solmate"]
+	path = 09_Bonus/FoundryTest/lib/solmate
+	url = https://github.com/transmissions11/solmate
+[submodule "09_Bonus/FoundryTest/lib/openzeppelin-contracts"]
+	path = 09_Bonus/FoundryTest/lib/openzeppelin-contracts
+	url = https://github.com/Openzeppelin/openzeppelin-contracts

@@ -1,14 +1,16 @@
 import { ethers } from "ethers"
 import { pinJSONToIPFS } from "./pinata.jsx"
+import contractJson from "../contract.json"
 
 const { VITE_CONTRACT_ADDRESS, VITE_CONTRACT_ADDRESS_LOCAL } = import.meta.env
 
-let provider, contractAddress, selectedAddress
+let provider, signer, contract, contractAddress, selectedAddress
 
 ;(async function setContractAddress() {
     if (window.ethereum) {
-        //TODO get Browserprovider and network
+        //TODO get Browserprovider, signer and network
         provider = null
+        signer = null
         const currentNetwork = null
 
         if (currentNetwork.chainId.toString().includes(1337)) {
@@ -16,6 +18,8 @@ let provider, contractAddress, selectedAddress
         } else {
             contractAddress = VITE_CONTRACT_ADDRESS
         }
+
+        //TODO create a contract instance
     }
 })()
 
@@ -137,15 +141,10 @@ export const mintNFT = async (name, description, imageUrl) => {
     }
     const tokenURI = pinataResponse.pinataUrl
 
-    //TODO encode the function data for the "mintNFT" smart contract function
-    const myData = null
-
-    //TODO create the txn parameters (from, to and encoded function data)
-    const transactionParameters = {}
-
     try {
-        //TODO send the transaction using Metamask => eth_sendTransaction
-        const txHash = null
+        //TODO call "mintNFT" directly on the contract instance
+        const txResponse = null
+        const txHash = txResponse.hash
 
         return {
             success: true,

@@ -1,13 +1,14 @@
 import { ethers } from "ethers"
 import { pinJSONToIPFS } from "./pinata.jsx"
+import contractJson from "../contract.json"
 
 const { VITE_CONTRACT_ADDRESS, VITE_CONTRACT_ADDRESS_LOCAL } = import.meta.env
 
-let provider, contractAddress, selectedAddress
-
+let provider, signer, contract, contractAddress, selectedAddress
 ;(async function setContractAddress() {
     if (window.ethereum) {
         provider = new ethers.BrowserProvider(window.ethereum)
+        signer = await provider.getSigner()
         const currentNetwork = await provider.getNetwork()
 
         if (currentNetwork.chainId.toString().includes(1337)) {
@@ -15,6 +16,8 @@ let provider, contractAddress, selectedAddress
         } else {
             contractAddress = VITE_CONTRACT_ADDRESS
         }
+
+        contract = new ethers.Contract(contractAddress, contractJson.abi, signer)
     }
 })()
 
@@ -149,6 +152,7 @@ export const mintNFT = async (name, description, imageUrl) => {
     const tokenURI = pinataResponse.pinataUrl
     console.log(tokenURI)
 
+    //alternative way of sending a transaction
     let iface = new ethers.Interface(["function mintNFT(address recipient, string memory tokenURI)"])
     const myData = iface.encodeFunctionData("mintNFT", [selectedAddress, tokenURI])
 
@@ -159,10 +163,14 @@ export const mintNFT = async (name, description, imageUrl) => {
     }
 
     try {
-        const txHash = await window.ethereum.request({
-            method: "eth_sendTransaction",
-            params: [transactionParameters],
-        })
+        // const txHash = await window.ethereum.request({
+        //     method: "eth_sendTransaction",
+        //     params: [transactionParameters],
+        // })
+
+        const txResponse = await contract.mintNFT(selectedAddress, tokenURI)
+        const txHash = txResponse.hash
+
         return {
             success: true,
             status: (
