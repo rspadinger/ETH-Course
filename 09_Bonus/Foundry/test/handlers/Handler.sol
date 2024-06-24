@@ -28,7 +28,6 @@ contract Handler is Test {
     }
 
     function retrieveBankBalance() public {
-        //assume(msg.sender == )
         bank.retrieveBankBalance();
     }
 

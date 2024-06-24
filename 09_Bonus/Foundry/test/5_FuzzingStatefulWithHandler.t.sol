@@ -18,11 +18,11 @@ contract BankTestWithHandler is Test {
         targetContract(address(handler));
     }
 
-    function invariant_bankBalanceAlwaysGreaterThanInitialBalance() external view {
+    function invariant_bankBalanceAlwaysGreaterEqualThanInitialBalance() external view {
         assert(address(bank).balance >= bank.initialBankBalance());
     }
 
     receive() external payable {}
 }
 
-//forge test --match-contract BankTestWithHandler --mt invariant_bankBalanceAlwaysGreaterThanInitialBalance
+//forge test --match-contract BankTestWithHandler --mt invariant_bankBalanceAlwaysGreaterEqualThanInitialBalance -vvvv

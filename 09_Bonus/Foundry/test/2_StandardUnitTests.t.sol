@@ -61,7 +61,7 @@ contract NFTTest is Test {
         //call ownerOf function on the ERC721 contract with the tokenId as argument
         uint256 slotOfNewOwner = stdstore.target(address(nft)).sig(nft.ownerOf.selector).with_key(1).find();
 
-        uint160 ownerOfTokenIdOne = uint160(uint256((vm.load(address(nft), bytes32(abi.encode(slotOfNewOwner))))));
+        uint160 ownerOfTokenIdOne = uint160(uint256((vm.load(address(nft), bytes32(slotOfNewOwner)))));
         assertEq(address(ownerOfTokenIdOne), address(1));
     }
 
@@ -91,7 +91,7 @@ contract NFTTest is Test {
     }
 
     function test_RevertUnSafeContractReceiver() public {
-        // Adress set to 19, because first 9 addresses are precompiles (special contracts at fixed addresses) => cannot use etch
+        // Adress set to 10, because first 9 addresses are precompiles (special contracts at fixed addresses) => cannot use etch
         //set arbitrary bytecode to the contract at address 10 => does not include onERC721Received
         vm.etch(address(10), bytes("mock code"));
         vm.expectRevert(bytes(""));

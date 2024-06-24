@@ -13,19 +13,17 @@ contract BankTest is Test {
     }
 
     function invariant_alwaysWithdrawable() external payable {
-        vm.prank(address(0xaa));
+        vm.startPrank(address(0xaa));
         vm.deal(address(0xaa), 10 ether);
 
         bank.deposit{value: 1 ether}();
         uint256 balanceBefore = bank.balances(address(0xaa));
-        vm.stopPrank();
         assertEq(balanceBefore, 1 ether);
 
-        vm.prank(address(0xaa));
         bank.withdraw();
         uint256 balanceAfter = bank.balances(address(0xaa));
+        assertEq(balanceAfter, 0);
         vm.stopPrank();
-        assertGt(balanceBefore, balanceAfter);
     }
 
     receive() external payable {}

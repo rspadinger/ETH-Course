@@ -14,6 +14,7 @@ contract SimpleDappTest is Test {
     }
 
     function test_DepositAndWithdraw(uint256 depositAmount, uint256 withdrawAmount) public payable {
+        //vm.assume(depositAmount > 0.1 ether);
         // Ensure the user has enough Ether to cover the deposit
         uint256 initialBalance = 100 ether;
         vm.deal(user, initialBalance);

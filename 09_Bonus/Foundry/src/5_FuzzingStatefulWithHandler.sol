@@ -26,7 +26,7 @@ contract BankWithHandler is Ownable {
     }
 
     function retrieveBankBalance() public {
-        //error => test will fail !!!
+        //error missing onlyOwner modifier => test will fail !!!
         (bool success, ) = owner().call{value: address(this).balance}("");
         require(success, "failed to send");
     }
