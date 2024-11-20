@@ -4,9 +4,9 @@ import contractJson from "../contract.json"
 
 const { VITE_CONTRACT_ADDRESS } = import.meta.env
 const provider = new ethers.BrowserProvider(window.ethereum)
-const signer = await provider.getSigner()
+//const signer = await provider.getSigner() // generates immediate MetaMask account selection popup !
 
-export const contract = new ethers.Contract(VITE_CONTRACT_ADDRESS, contractJson.abi, signer)
+export const contract = new ethers.Contract(VITE_CONTRACT_ADDRESS, contractJson.abi, provider) // signer
 
 export const getCurrentWalletConnected = async () => {
     if (window.ethereum) {
@@ -129,13 +129,13 @@ export const updateMessage = async (address, message) => {
 
     try {
         //sign the transaction using Metamask
-        // const txHash = await window.ethereum.request({
-        //     method: "eth_sendTransaction",
-        //     params: [transactionParameters],
-        // })
+        const txHash = await window.ethereum.request({
+            method: "eth_sendTransaction",
+            params: [transactionParameters],
+        })
 
-        const txResponse = await contract.updateMessage(message)
-        const txHash = txResponse.hash
+        // const txResponse = await contract.updateMessage(message)
+        // const txHash = txResponse.hash
 
         return {
             status: (

@@ -2,7 +2,7 @@
 
 const { VITE_CONTRACT_ADDRESS } = import.meta.env
 
-//TODO set the provider and signer
+//TODO set the provider (and signer)
 
 //TODO export the contract
 

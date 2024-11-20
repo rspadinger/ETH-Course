@@ -8,10 +8,10 @@ let provider, signer, contract, contractAddress, selectedAddress
 
 ;(async function setContractAddress() {
     if (window.ethereum) {
-        //TODO get Browserprovider, signer and network
-        provider = null
-        signer = null
+        //TODO get Browserprovider, network (and Signer)
+        provider = null        
         const currentNetwork = null
+        //signer = null
 
         if (currentNetwork.chainId.toString().includes(1337)) {
             contractAddress = VITE_CONTRACT_ADDRESS_LOCAL
@@ -142,7 +142,10 @@ export const mintNFT = async (name, description, imageUrl) => {
     const tokenURI = pinataResponse.pinataUrl
 
     try {
-        //TODO call "mintNFT" directly on the contract instance
+        //TODO send the transaction using Metamask => eth_sendTransaction , return txHash
+        const txHash = null
+
+        //TODO alternative way (without using eth_sendTransaction) => call "updateMessage" directly on the contract instance
         const txResponse = null
         const txHash = txResponse.hash
 
