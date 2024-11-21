@@ -61,8 +61,6 @@ contract CrowdFund {
         uint32 _startAt = uint32(block.timestamp);
         uint32 _endAt = uint32(block.timestamp + 1 hours);
 
-        require(_startAt >= block.timestamp, "start at < now");
-        require(_endAt >= _startAt, "end at < start at");
         require(_endAt <= block.timestamp + 90 days, "end at > max duration");
 
         count += 1;
@@ -77,15 +75,6 @@ contract CrowdFund {
         });
 
         emit Launch(count, msg.sender, _goal, _startAt, _endAt);
-    }
-
-    function cancel(uint256 _id) external {
-        Campaign memory campaign = campaigns[_id];
-        require(campaign.creator == msg.sender, "not creator");
-        require(block.timestamp < campaign.startAt, "started");
-
-        delete campaigns[_id];
-        emit Cancel(_id);
     }
 
     function pledge(uint256 _id, uint256 _amount) external {

@@ -35,10 +35,6 @@ contract CrowdFund {
     function launch... {        
     }
 
-    //TODO cancel a specific campaign (by id) - only the campaign owner is allowed to cancel the campaign    
-    function cancel... {        
-    }
-
     //TODO investors can fund a specific campaign with a specific amaount (in CrowdFundToken tokens) as long as the campaign has not ended
     //the specified amount for the campaign funding will be transferred from the investor balance of the CrowdFundToken contract to the crowd funding contract
     function fund... {        
