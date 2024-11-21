@@ -116,7 +116,7 @@ export const mintNFT = async (name, description, imageUrl) => {
         }
     }
 
-    //https://docs.pinata.cloud/pinata-api/pinning/pin-json
+    //https://docs.pinata.cloud/api-reference/endpoint/ipfs/pin-json-to-ipfs
     //https://docs.opensea.io/docs/metadata-standards
     const metadata = {
         pinataMetadata: {

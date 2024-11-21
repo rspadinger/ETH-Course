@@ -40,7 +40,7 @@ async function main() {
     // const txData = iface.encodeFunctionData("mintNFT", [signer2.address, tokenURI])
     // const txnParams = {
     //     from: signer.address,
-    //     to: contract.address,
+    //     to: signer2.address,
     //     data: txData,
     // }
     // txn = await signer.sendTransaction(txnParams)
@@ -50,10 +50,10 @@ async function main() {
     // display how many NFT's (of this specific contract) are owned by the recipient
     console.log("Number of NFT's owned by the recipient: ", await contract.balanceOf(signer2.address))
 
-    // display the owner of NFT with Id = 1
-    console.log("Owner of NFT with Id 1: ", await contract.ownerOf(1))
+    // display the owner of NFT with Id = 0
+    console.log("Owner of NFT with Id 0: ", await contract.ownerOf(0))
 
-    // transfer NFT with Id = 1 to another account => swap signer and signer2 on the method call below
+    // transfer NFT with Id = 0 to another account => swap signer and signer2 on the method call below
     //if we want to transfer it back, we also need to change the signer => safeTransfer requires :: from == owner && msg.sender == owner
     contract = await contract.connect(signer2)
 
@@ -61,10 +61,10 @@ async function main() {
     //console.log("Contract: ", contract)
     //ethers.js < v5.0 => for overridden functions
     //txn = await contract["safeTransferFrom(address,address,uint256)"](signer2.address, signer.address, 1)
-    txn = await contract.safeTransferFrom(signer2.address, signer.address, 1)
+    txn = await contract.safeTransferFrom(signer2.address, signer.address, 0)
     txnReceipt = await txn.wait()
 
-    console.log("New owner of NFT with Id 1: ", await contract.ownerOf(1))
+    console.log("New owner of NFT with Id 0: ", await contract.ownerOf(0))
 }
 
 main()

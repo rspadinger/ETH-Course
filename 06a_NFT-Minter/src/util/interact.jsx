@@ -116,7 +116,7 @@ export const mintNFT = async (name, description, imageUrl) => {
         }
     }
 
-    //https://docs.pinata.cloud/pinata-api/pinning/pin-json
+    //https://docs.pinata.cloud/api-reference/endpoint/ipfs/pin-json-to-ipfs
     //https://docs.opensea.io/docs/metadata-standards
     const metadata = {
         pinataMetadata: {
@@ -129,6 +129,16 @@ export const mintNFT = async (name, description, imageUrl) => {
             name,
             description,
             image: imageUrl,
+            attributes: [
+                {
+                    trait_type: "Fur",
+                    value: "White",
+                },
+                {
+                    trait_type: "Eye color",
+                    value: "Blue",
+                },
+            ],
         },
     }
 
@@ -143,11 +153,12 @@ export const mintNFT = async (name, description, imageUrl) => {
 
     try {
         //TODO send the transaction using Metamask => eth_sendTransaction , return txHash
+        //create transactionParameters with encoded function data
         const txHash = null
 
         //TODO alternative way (without using eth_sendTransaction) => call "updateMessage" directly on the contract instance
-        const txResponse = null
-        const txHash = txResponse.hash
+        //const txResponse = null
+        //const txHash = txResponse.hash
 
         return {
             success: true,

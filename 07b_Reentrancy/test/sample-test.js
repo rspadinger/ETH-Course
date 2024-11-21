@@ -36,7 +36,7 @@ describe("Deploy contracts", function () {
             const bankOwnerBalance = await bankContract.balanceOf(bankOwner.address)
             const customerBalance = await bankContract.balanceOf(customer.address)
 
-            expect(bankOwnerBalance).to.eq(ethers.parseEther("50"))
+            expect(bankOwnerBalance).to.eq(ethers.parseEther("100"))
             expect(customerBalance).to.eq(0)
         })
 

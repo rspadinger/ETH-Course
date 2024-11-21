@@ -64,6 +64,7 @@ contract EnglishAuction {
         require(block.timestamp < endAt, "ended");
         require(msg.value > highestBid, "value < highest");
 
+        //previous highest bidder can withdraw
         if (highestBidder != address(0)) {
             bids[highestBidder] += highestBid;
         }
@@ -76,6 +77,8 @@ contract EnglishAuction {
 
     function withdraw() external {
         uint256 bal = bids[msg.sender];
+        require(bal < highestBid, "Highest bidder cannot withdraw");
+
         bids[msg.sender] = 0;
         payable(msg.sender).transfer(bal);
 

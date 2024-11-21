@@ -2,6 +2,7 @@ import axios from "redaxios"
 
 const { VITE_PINATA_KEY, VITE_PINATA_SECRET } = import.meta.env
 
+//https://docs.pinata.cloud/api-reference/endpoint/ipfs/pin-json-to-ipfs
 export const pinJSONToIPFS = async (metadata) => {
     const data = JSON.stringify(metadata)
     const config = {

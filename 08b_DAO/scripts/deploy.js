@@ -28,7 +28,7 @@ async function main() {
         minDelay,
         [proposer.address],
         [executor.address],
-        ethers.ZeroAddress,
+        executor.address,
     ])
     await timeLock.waitForDeployment()
     const timeLockAddress = timeLock.target
